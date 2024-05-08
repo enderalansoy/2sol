@@ -6,6 +6,8 @@ This is a code assignment project for 2solar, implementing a web application usi
 
 ## Installation
 
+Copy the .env.example file into .env and fill in necessary details
+
 To install the project dependencies, run:
 
 ```bash
