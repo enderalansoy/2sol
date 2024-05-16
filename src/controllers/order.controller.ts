@@ -10,7 +10,13 @@ export interface OrderItem {
   quantity: number;
 }
 
-export const list = async (req: Request, res: Response): Promise<Response> => {
+/**
+ * List all orders with their associated systems.
+ * @param {Request} req - The Express request object (unused).
+ * @param {Response} res - The Express response object.
+ * @returns {Promise<Response>} A promise that resolves with a response containing the list of orders.
+ */
+export const list = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const orders = await Order.findAll({ include: [System] });
     return res.json(orders);
@@ -20,14 +26,20 @@ export const list = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
+/**
+ * Create a new order with associated systems and update product stock.
+ * @param {Request} req - The request object.
+ * @param {Response} res - The response object.
+ * @returns {Promise<Response>} - A promise that resolves to a response object with the created order.
+ */
 export const create = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
-    return await dbConnection.transaction(async (transaction) => {
+    return await dbConnection.transaction(async (transaction: Transaction) => {
       const items: OrderItem[] = req.body.items;
-      await validateInput(items, transaction, res);
+      await validateInput(items, transaction);
       const systemIds = [...new Set(items.map((item) => item.system_id))];
 
       const systems = await SystemProduct.findAll({
@@ -73,13 +85,16 @@ export const create = async (
   }
 };
 
-/*
- * A series of basic checks to make sure the user input is valid
+/**
+ * Validate the input items for creating an order.
+ * @param {OrderItem[]} items - The order items to validate.
+ * @param {Transaction} t - The transaction object.
+ * @returns {Promise<void>} - A promise that resolves when the input is validated or rejects with an error message.
+ * @throws {Error} If validation fails.
  */
-const validateInput = async (
+export const validateInput = async (
   items: OrderItem[],
   t: Transaction,
-  res: Response
 ): Promise<void> => {
   for (const item of items) {
     const system = await System.findByPk(item.system_id);

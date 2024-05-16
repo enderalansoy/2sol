@@ -2,7 +2,14 @@ import { Request, Response } from 'express';
 import Product, { SystemProduct } from '../models/product.model';
 import System from '../models/system.model';
 
-export const list = async (req: Request, res: Response): Promise<Response> => {
+/**
+ * Fetches a list of systems, including their associated products.
+ *
+ * @param {Request} _req - The Express request object (unused).
+ * @param {Response} res - The Express response object.
+ * @returns {Promise<Response>} A promise that resolves with a response containing the list of systems.
+ */
+export const list = async (_req: Request, res: Response): Promise<Response> => {
   try {
     const systems = await System.findAll({
       include: [
@@ -34,6 +41,13 @@ export const list = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
+/**
+ * Creates a new system and associates it with the provided products.
+ *
+ * @param {Request} req - The Express request object containing product data.
+ * @param {Response} res - The Express response object.
+ * @returns {Promise<Response>} A promise that resolves with a response containing the created system and associated products.
+ */
 export const create = async (
   req: Request,
   res: Response

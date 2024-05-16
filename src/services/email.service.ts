@@ -1,5 +1,11 @@
 import nodemailer from 'nodemailer';
 
+/**
+ * Sends an email with the specified subject and HTML content.
+ * @param {string} subject - The subject of the email.
+ * @param {string} html - The HTML content of the email.
+ * @returns {Promise<void>} - A promise that resolves when the email is sent or rejects with an error.
+ */
 export const sendEmail = async (
   subject: string,
   html: string

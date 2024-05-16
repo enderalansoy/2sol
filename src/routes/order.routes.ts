@@ -5,7 +5,16 @@ import Product from '../models/product.model';
 
 const router = Router();
 
+/**
+ * GET /order
+ * Retrieves a list of orders.
+ */
 router.get('/', list);
+
+/**
+ * POST /order/create
+ * Creates a new order and checks for low stock of products.
+ */
 router.post('/create', async (req, res) => {
   const currentProducts = await Product.findAll();
   create(req, res).then(() => {

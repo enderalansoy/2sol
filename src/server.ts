@@ -8,6 +8,10 @@ import ProductRoutes from './routes/product.routes';
 import OrderRoutes from './routes/order.routes';
 import CommonRoutes from './routes/common.routes';
 
+/**
+ * Creates and configures an Express server with necessary middleware and routes.
+ * @returns {Express} - The configured Express application.
+ */
 const createServer = () => {
   const app: Express = express();
   const env = process.env.ENV || 'dev';

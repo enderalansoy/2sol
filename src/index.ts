@@ -6,6 +6,10 @@ dotenv.config();
 const app = createServer();
 const port = process.env.PORT || 4000;
 
+/**
+ * Starts the server and establishes a connection to the database.
+ * @returns {Promise<void>} - A promise that resolves when the server is started and the database connection is established.
+ */
 const start = async (): Promise<void> => {
   try {
     // Database connection
