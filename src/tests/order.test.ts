@@ -5,9 +5,16 @@ import Order from '../models/order.model';
 
 const app = createServer();
 
-jest.mock('../models/product.model');
-jest.mock('../models/system.model');
-jest.mock('../models/order.model');
+jest.mock('../models/product.model', () => ({
+  findByPk: jest.fn(),
+  SystemProduct: {
+    findAll: jest.fn(),
+  },
+}));
+
+jest.mock('../models/order.model', () => ({
+  create: jest.fn(),
+}));
 
 describe('order', () => {
   describe('updates product stock correctly', () => {
@@ -21,14 +28,11 @@ describe('order', () => {
 
       const orderInput = { items: [{ system_id: 1, quantity: 2 }] };
 
-      const {
-        statusCode: createOrderStatusCode,
-      } = await supertest(app)
+      const { statusCode: createOrderStatusCode } = await supertest(app)
         .post('/order/create')
         .send(orderInput);
 
-      const { body: productBody } = await supertest(app)
-        .get('/product/1');
+      const { body: productBody } = await supertest(app).get('/product/1');
 
       expect(createOrderStatusCode).toBe(201);
       expect(productBody.stock).toEqual(76);
