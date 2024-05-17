@@ -72,3 +72,8 @@ export const sendLowStockNotification = (product: Product) => {
   console.info(message);
   sendEmail('Low stock alert', message);
 };
+
+export const findById = async (req: Request, res: Response) => {
+  const product = await Product.findByPk(req.params.id)
+  return res.json(product);
+}
